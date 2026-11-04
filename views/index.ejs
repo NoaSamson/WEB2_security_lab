@@ -1,67 +1,84 @@
 <!DOCTYPE html>
 <html>
-<head><title>Lab2</title></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab2</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 0 16px; background: #f4f4f4; }
+    section { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 16px; margin-bottom: 20px; }
+    h2 { margin-top: 0; }
+    table { border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 4px 8px; }
+    pre { background: #fee; padding: 8px; white-space: pre-wrap; }
+    input, button { padding: 4px 8px; }
+  </style>
+</head>
 <body>
   <h1>Lab2</h1>
   <form id="toggle" method="post" action="/toggle"></form>
 
-  <h2>SQL umetanje</h2>
-  <label><input type="checkbox" name="sqli" form="toggle" onchange="this.form.submit()" <%= sqli ? 'checked' : '' %>> Ranjivost uključena</label>
+  <section>
+    <h2>SQL umetanje</h2>
+    <label><input type="checkbox" name="sqli" form="toggle" onchange="this.form.submit()" <%= sqli ? 'checked' : '' %>> Ranjivost uključena</label>
 
-  <h3>Pretraži korisnika po korisničkom imenu</h3>
-  <form method="post" action="/search">
-    <input name="username">
-    <button>Pretraži</button>
-  </form>
-
-  <% if (error) { %>
-    <pre><%= error %></pre>
-  <% } %>
-
-  <% if (results) { %>
-    <table border="1">
-      <tr><th>id</th><th>username</th><th>email</th><th>balance</th></tr>
-      <% results.forEach(r => { %>
-        <tr><td><%= r.id %></td><td><%= r.username %></td><td><%= r.email %></td><td><%= r.balance %></td></tr>
-      <% }) %>
-    </table>
-  <% } %>
-
-  <h2>CSRF</h2>
-  <label><input type="checkbox" name="csrfVuln" form="toggle" onchange="this.form.submit()" <%= csrfVuln ? 'checked' : '' %>> Ranjivost uključena</label>
-
-  <% if (!user) { %>
-    <h3>Prijava</h3>
-    <form method="post" action="/login">
-      <input name="username" placeholder="korisničko ime">
-      <input name="password" type="password" placeholder="lozinka">
-      <button>Prijava</button>
-    </form>
-    <% if (loginError) { %><p><%= loginError %></p><% } %>
-  <% } else { %>
-    <p>Prijavljen: <b><%= user.username %></b> |
-       Stanje: <b><%= user.balance %></b> |
-       <form method="post" action="/logout" style="display:inline"><button>Odjava</button></form>
-    </p>
-
-    <h3>Prijenos novca</h3>
-    <form method="post" action="/transfer">
-      <input name="to" placeholder="primatelj">
-      <input name="amount" type="number" placeholder="iznos">
-      <input type="hidden" name="csrf" value="<%= csrf %>">
-      <button>Prenesi</button>
+    <h3>Pretraži korisnika po korisničkom imenu</h3>
+    <form method="post" action="/search">
+      <input name="username">
+      <button>Pretraži</button>
     </form>
 
-    <h3>Zadnje transakcije</h3>
-    <table border="1">
-      <tr><th>od</th><th>prema</th><th>iznos</th><th>vrijeme</th></tr>
-      <% logs.forEach(l => { %>
-        <tr><td><%= l.fromName %></td><td><%= l.toName %></td><td><%= l.amount %></td><td><%= l.time %></td></tr>
-      <% }) %>
-    </table>
-  <% } %>
+    <% if (error) { %>
+      <pre><%= error %></pre>
+    <% } %>
 
-  <br><br>
+    <% if (results) { %>
+      <table>
+        <tr><th>id</th><th>username</th><th>email</th><th>balance</th></tr>
+        <% results.forEach(r => { %>
+          <tr><td><%= r.id %></td><td><%= r.username %></td><td><%= r.email %></td><td><%= r.balance %></td></tr>
+        <% }) %>
+      </table>
+    <% } %>
+  </section>
+
+  <section>
+    <h2>CSRF</h2>
+    <label><input type="checkbox" name="csrfVuln" form="toggle" onchange="this.form.submit()" <%= csrfVuln ? 'checked' : '' %>> Ranjivost uključena</label>
+
+    <% if (!user) { %>
+      <h3>Prijava</h3>
+      <form method="post" action="/login">
+        <input name="username" placeholder="korisničko ime">
+        <input name="password" type="password" placeholder="lozinka">
+        <button>Prijava</button>
+      </form>
+      <% if (loginError) { %><p><%= loginError %></p><% } %>
+    <% } else { %>
+      <div style="margin-top: 10px">
+        Prijavljen: <b><%= user.username %></b> |
+        Stanje: <b><%= user.balance %></b> |
+        <form method="post" action="/logout" style="display:inline"><button>Odjava</button></form>
+      </div>
+
+      <h3>Prijenos novca</h3>
+      <form method="post" action="/transfer">
+        <input name="to" placeholder="primatelj">
+        <input name="amount" type="number" placeholder="iznos">
+        <input type="hidden" name="csrf" value="<%= csrf %>">
+        <button>Prenesi</button>
+      </form>
+
+      <h3>Zadnje transakcije</h3>
+      <table>
+        <tr><th>od</th><th>prema</th><th>iznos</th><th>vrijeme</th></tr>
+        <% logs.forEach(l => { %>
+          <tr><td><%= l.fromName %></td><td><%= l.toName %></td><td><%= l.amount %></td><td><%= l.time %></td></tr>
+        <% }) %>
+      </table>
+    <% } %>
+  </section>
+
   <form method="post" action="/reset">
     <button>Resetiraj bazu</button>
   </form>
