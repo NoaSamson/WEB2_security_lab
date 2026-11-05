@@ -20,6 +20,7 @@
 
   <section>
     <h2>SQL umetanje</h2>
+    <p><small>Uključi ranjivost pa u pretragu upiši <code>' OR '1'='1</code> da dobiješ sve korisnike, ili <code>x' UNION SELECT id, username, password, balance FROM users--</code> da pročitaš lozinke. Isključi ranjivost i isti unos bude odbijen.</small></p>
     <label><input type="checkbox" name="sqli" form="toggle" onchange="this.form.submit()" <%= sqli ? 'checked' : '' %>> Ranjivost uključena</label>
 
     <h3>Pretraži korisnika po korisničkom imenu</h3>
@@ -44,6 +45,7 @@
 
   <section>
     <h2>CSRF</h2>
+    <p><small>Prijavi se kao alice pa otvori napadačku stranicu s drugog poslužitelja. S uključenom ranjivošću napad (GET slika i POST obrazac) smanji stanje žrtve; s isključenom ranjivošću GET vraća 405, a POST bez tokena 403.</small></p>
     <label><input type="checkbox" name="csrfVuln" form="toggle" onchange="this.form.submit()" <%= csrfVuln ? 'checked' : '' %>> Ranjivost uključena</label>
 
     <% if (!user) { %>
